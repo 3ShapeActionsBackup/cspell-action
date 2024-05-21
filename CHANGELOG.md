@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.1](https://github.com/streetsidesoftware/cspell-action/compare/v6.3.0...v6.3.1) (2024-05-21)
+
+
+### Updates and Bug Fixes
+
+* Update Dictionaries and Dependencies ([#1726](https://github.com/streetsidesoftware/cspell-action/issues/1726)) ([625b456](https://github.com/streetsidesoftware/cspell-action/commit/625b45618098a0217270979d03dc9b2928a4e9c4))
+* Update Dictionaries and Dependencies ([#1733](https://github.com/streetsidesoftware/cspell-action/issues/1733)) ([cbb4e6f](https://github.com/streetsidesoftware/cspell-action/commit/cbb4e6fcf3fde7f4dd953c674be228944ebd594e))
+* Workflow Bot -- Update ALL Dependencies (main) ([#1736](https://github.com/streetsidesoftware/cspell-action/issues/1736)) ([4a016c5](https://github.com/streetsidesoftware/cspell-action/commit/4a016c5b82afc177b2b9240c4c6741931c6980f6))
+
 ## [6.3.0](https://github.com/streetsidesoftware/cspell-action/compare/v6.2.0...v6.3.0) (2024-05-10)
 
 
