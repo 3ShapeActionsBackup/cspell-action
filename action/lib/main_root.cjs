@@ -20392,10 +20392,11 @@ var require_braces = __commonJS({
   }
 });
 
-// ../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/constants.js
+// ../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/constants.js
 var require_constants7 = __commonJS({
-  "../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/constants.js"(exports2, module2) {
+  "../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/constants.js"(exports2, module2) {
     "use strict";
+    var path28 = require("path");
     var WIN_SLASH = "\\\\/";
     var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
     var DOT_LITERAL = "\\.";
@@ -20413,7 +20414,6 @@ var require_constants7 = __commonJS({
     var NO_DOTS_SLASH = `(?!${DOTS_SLASH})`;
     var QMARK_NO_DOT = `[^.${SLASH_LITERAL}]`;
     var STAR = `${QMARK}*?`;
-    var SEP = "/";
     var POSIX_CHARS = {
       DOT_LITERAL,
       PLUS_LITERAL,
@@ -20429,8 +20429,7 @@ var require_constants7 = __commonJS({
       NO_DOTS_SLASH,
       QMARK_NO_DOT,
       STAR,
-      START_ANCHOR,
-      SEP
+      START_ANCHOR
     };
     var WINDOWS_CHARS = {
       ...POSIX_CHARS,
@@ -20444,8 +20443,7 @@ var require_constants7 = __commonJS({
       NO_DOTS_SLASH: `(?!${DOT_LITERAL}{1,2}(?:[${WIN_SLASH}]|$))`,
       QMARK_NO_DOT: `[^.${WIN_SLASH}]`,
       START_ANCHOR: `(?:^|[${WIN_SLASH}])`,
-      END_ANCHOR: `(?:[${WIN_SLASH}]|$)`,
-      SEP: "\\"
+      END_ANCHOR: `(?:[${WIN_SLASH}]|$)`
     };
     var POSIX_REGEX_SOURCE = {
       alnum: "a-zA-Z0-9",
@@ -20568,6 +20566,7 @@ var require_constants7 = __commonJS({
       /* | */
       CHAR_ZERO_WIDTH_NOBREAK_SPACE: 65279,
       /* \uFEFF */
+      SEP: path28.sep,
       /**
        * Create EXTGLOB_CHARS
        */
@@ -20590,10 +20589,12 @@ var require_constants7 = __commonJS({
   }
 });
 
-// ../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/utils.js
+// ../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/utils.js
 var require_utils4 = __commonJS({
-  "../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/utils.js"(exports2) {
+  "../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/utils.js"(exports2) {
     "use strict";
+    var path28 = require("path");
+    var win32 = process.platform === "win32";
     var {
       REGEX_BACKSLASH,
       REGEX_REMOVE_BACKSLASH,
@@ -20605,20 +20606,23 @@ var require_utils4 = __commonJS({
     exports2.isRegexChar = (str) => str.length === 1 && exports2.hasRegexChars(str);
     exports2.escapeRegex = (str) => str.replace(REGEX_SPECIAL_CHARS_GLOBAL, "\\$1");
     exports2.toPosixSlashes = (str) => str.replace(REGEX_BACKSLASH, "/");
-    exports2.isWindows = () => {
-      if (typeof navigator !== "undefined" && navigator.platform) {
-        const platform = navigator.platform.toLowerCase();
-        return platform === "win32" || platform === "windows";
-      }
-      if (typeof process !== "undefined" && process.platform) {
-        return process.platform === "win32";
-      }
-      return false;
-    };
     exports2.removeBackslashes = (str) => {
       return str.replace(REGEX_REMOVE_BACKSLASH, (match2) => {
         return match2 === "\\" ? "" : match2;
       });
+    };
+    exports2.supportsLookbehinds = () => {
+      const segs = process.version.slice(1).split(".").map(Number);
+      if (segs.length === 3 && segs[0] >= 9 || segs[0] === 8 && segs[1] >= 10) {
+        return true;
+      }
+      return false;
+    };
+    exports2.isWindows = (options) => {
+      if (options && typeof options.windows === "boolean") {
+        return options.windows;
+      }
+      return win32 === true || path28.sep === "\\";
     };
     exports2.escapeLast = (input, char, lastIdx) => {
       const idx2 = input.lastIndexOf(char, lastIdx);
@@ -20643,20 +20647,12 @@ var require_utils4 = __commonJS({
       }
       return output;
     };
-    exports2.basename = (path28, { windows: windows2 } = {}) => {
-      const segs = path28.split(windows2 ? /[\\/]/ : "/");
-      const last = segs[segs.length - 1];
-      if (last === "") {
-        return segs[segs.length - 2];
-      }
-      return last;
-    };
   }
 });
 
-// ../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/scan.js
+// ../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/scan.js
 var require_scan = __commonJS({
-  "../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/scan.js"(exports2, module2) {
+  "../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/scan.js"(exports2, module2) {
     "use strict";
     var utils = require_utils4();
     var {
@@ -20984,9 +20980,9 @@ var require_scan = __commonJS({
   }
 });
 
-// ../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/parse.js
+// ../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/parse.js
 var require_parse3 = __commonJS({
-  "../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/parse.js"(exports2, module2) {
+  "../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/parse.js"(exports2, module2) {
     "use strict";
     var constants = require_constants7();
     var utils = require_utils4();
@@ -21027,7 +21023,8 @@ var require_parse3 = __commonJS({
       const bos = { type: "bos", value: "", output: opts.prepend || "" };
       const tokens = [bos];
       const capture = opts.capture ? "" : "?:";
-      const PLATFORM_CHARS = constants.globChars(opts.windows);
+      const win32 = utils.isWindows(options);
+      const PLATFORM_CHARS = constants.globChars(win32);
       const EXTGLOB_CHARS = constants.extglobChars(PLATFORM_CHARS);
       const {
         DOT_LITERAL,
@@ -21130,8 +21127,8 @@ var require_parse3 = __commonJS({
         }
         if (tok.value || tok.output) append(tok);
         if (prev && prev.type === "text" && tok.type === "text") {
-          prev.output = (prev.output || prev.value) + tok.value;
           prev.value += tok.value;
+          prev.output = (prev.output || "") + tok.value;
           return;
         }
         tok.prev = prev;
@@ -21467,6 +21464,9 @@ var require_parse3 = __commonJS({
           if (prev && prev.type === "paren") {
             const next = peek();
             let output = value;
+            if (next === "<" && !utils.supportsLookbehinds()) {
+              throw new Error("Node.js v10 or higher is required for regex lookbehinds");
+            }
             if (prev.value === "(" && !/[!=<:]/.test(next) || next === "<" && !/<([!=]|\w+>)/.test(remaining())) {
               output = `\\${value}`;
             }
@@ -21691,6 +21691,7 @@ var require_parse3 = __commonJS({
         throw new SyntaxError(`Input length: ${len}, exceeds maximum allowed length: ${max4}`);
       }
       input = REPLACEMENTS[input] || input;
+      const win32 = utils.isWindows(options);
       const {
         DOT_LITERAL,
         SLASH_LITERAL,
@@ -21701,7 +21702,7 @@ var require_parse3 = __commonJS({
         NO_DOTS_SLASH,
         STAR,
         START_ANCHOR
-      } = constants.globChars(opts.windows);
+      } = constants.globChars(win32);
       const nodot = opts.dot ? NO_DOTS : NO_DOT;
       const slashDot = opts.dot ? NO_DOTS_SLASH : NO_DOT;
       const capture = opts.capture ? "" : "?:";
@@ -21752,10 +21753,11 @@ var require_parse3 = __commonJS({
   }
 });
 
-// ../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/picomatch.js
+// ../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/picomatch.js
 var require_picomatch = __commonJS({
-  "../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/lib/picomatch.js"(exports2, module2) {
+  "../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/lib/picomatch.js"(exports2, module2) {
     "use strict";
+    var path28 = require("path");
     var scan3 = require_scan();
     var parse5 = require_parse3();
     var utils = require_utils4();
@@ -21778,7 +21780,7 @@ var require_picomatch = __commonJS({
         throw new TypeError("Expected pattern to be a non-empty string");
       }
       const opts = options || {};
-      const posix4 = opts.windows;
+      const posix4 = utils.isWindows(options);
       const regex = isState ? picomatch.compileRe(glob2, options) : picomatch.makeRe(glob2, options, false, true);
       const state = regex.state;
       delete regex.state;
@@ -21838,9 +21840,9 @@ var require_picomatch = __commonJS({
       }
       return { isMatch: Boolean(match2), match: match2, output };
     };
-    picomatch.matchBase = (input, glob2, options) => {
+    picomatch.matchBase = (input, glob2, options, posix4 = utils.isWindows(options)) => {
       const regex = glob2 instanceof RegExp ? glob2 : picomatch.makeRe(glob2, options);
-      return regex.test(utils.basename(input));
+      return regex.test(path28.basename(input));
     };
     picomatch.isMatch = (str, patterns, options) => picomatch(patterns, options)(str);
     picomatch.parse = (pattern, options) => {
@@ -21892,57 +21894,43 @@ var require_picomatch = __commonJS({
   }
 });
 
-// ../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/index.js
+// ../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/index.js
 var require_picomatch2 = __commonJS({
-  "../node_modules/.pnpm/picomatch@4.0.2/node_modules/picomatch/index.js"(exports2, module2) {
+  "../node_modules/.pnpm/picomatch@2.3.1/node_modules/picomatch/index.js"(exports2, module2) {
     "use strict";
-    var pico = require_picomatch();
-    var utils = require_utils4();
-    function picomatch(glob2, options, returnState = false) {
-      if (options && (options.windows === null || options.windows === void 0)) {
-        options = { ...options, windows: utils.isWindows() };
-      }
-      return pico(glob2, options, returnState);
-    }
-    Object.assign(picomatch, pico);
-    module2.exports = picomatch;
+    module2.exports = require_picomatch();
   }
 });
 
-// ../node_modules/.pnpm/micromatch@4.0.6/node_modules/micromatch/index.js
+// ../node_modules/.pnpm/micromatch@4.0.7/node_modules/micromatch/index.js
 var require_micromatch = __commonJS({
-  "../node_modules/.pnpm/micromatch@4.0.6/node_modules/micromatch/index.js"(exports2, module2) {
+  "../node_modules/.pnpm/micromatch@4.0.7/node_modules/micromatch/index.js"(exports2, module2) {
     "use strict";
     var util = require("util");
     var braces = require_braces();
     var picomatch = require_picomatch2();
     var utils = require_utils4();
-    var isEmptyString = (v) => v === "" || v === "./";
-    var isObject = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
-    var hasBraces = (v) => {
-      const index = v.indexOf("{");
-      return index > -1 && v.indexOf("}", index) > -1;
-    };
+    var isEmptyString = (val) => val === "" || val === "./";
     var micromatch = (list, patterns, options) => {
       patterns = [].concat(patterns);
       list = [].concat(list);
-      const omit = /* @__PURE__ */ new Set();
-      const keep = /* @__PURE__ */ new Set();
-      const items = /* @__PURE__ */ new Set();
+      let omit = /* @__PURE__ */ new Set();
+      let keep = /* @__PURE__ */ new Set();
+      let items = /* @__PURE__ */ new Set();
       let negatives = 0;
-      const onResult = (state) => {
+      let onResult = (state) => {
         items.add(state.output);
         if (options && options.onResult) {
           options.onResult(state);
         }
       };
       for (let i = 0; i < patterns.length; i++) {
-        const isMatch = picomatch(String(patterns[i]), { windows: true, ...options, onResult }, true);
-        const negated = isMatch.state.negated || isMatch.state.negatedExtglob;
+        let isMatch = picomatch(String(patterns[i]), { ...options, onResult }, true);
+        let negated = isMatch.state.negated || isMatch.state.negatedExtglob;
         if (negated) negatives++;
-        for (const item of list) {
-          const matched = isMatch(item, true);
-          const match2 = negated ? !matched.isMatch : matched.isMatch;
+        for (let item of list) {
+          let matched = isMatch(item, true);
+          let match2 = negated ? !matched.isMatch : matched.isMatch;
           if (!match2) continue;
           if (negated) {
             omit.add(matched.output);
@@ -21952,8 +21940,8 @@ var require_micromatch = __commonJS({
           }
         }
       }
-      const result = negatives === patterns.length ? [...items] : [...keep];
-      const matches = result.filter((item) => !omit.has(item));
+      let result = negatives === patterns.length ? [...items] : [...keep];
+      let matches = result.filter((item) => !omit.has(item));
       if (options && matches.length === 0) {
         if (options.failglob === true) {
           throw new Error(`No matches found for "${patterns.join(", ")}"`);
@@ -21965,19 +21953,19 @@ var require_micromatch = __commonJS({
       return matches;
     };
     micromatch.match = micromatch;
-    micromatch.matcher = (pattern, options) => picomatch(pattern, { windows: true, ...options });
+    micromatch.matcher = (pattern, options) => picomatch(pattern, options);
     micromatch.isMatch = (str, patterns, options) => picomatch(patterns, options)(str);
     micromatch.any = micromatch.isMatch;
     micromatch.not = (list, patterns, options = {}) => {
       patterns = [].concat(patterns).map(String);
-      const result = /* @__PURE__ */ new Set();
-      const items = [];
-      const onResult = (state) => {
+      let result = /* @__PURE__ */ new Set();
+      let items = [];
+      let onResult = (state) => {
         if (options.onResult) options.onResult(state);
         items.push(state.output);
       };
-      const matches = new Set(micromatch(list, patterns, { ...options, onResult }));
-      for (const item of items) {
+      let matches = new Set(micromatch(list, patterns, { ...options, onResult }));
+      for (let item of items) {
         if (!matches.has(item)) {
           result.add(item);
         }
@@ -22002,18 +21990,18 @@ var require_micromatch = __commonJS({
       return micromatch.isMatch(str, pattern, { ...options, contains: true });
     };
     micromatch.matchKeys = (obj, patterns, options) => {
-      if (!isObject(obj)) {
+      if (!utils.isObject(obj)) {
         throw new TypeError("Expected the first argument to be an object");
       }
-      const keys3 = micromatch(Object.keys(obj), patterns, options);
-      const res = {};
-      for (const key of keys3) res[key] = obj[key];
+      let keys3 = micromatch(Object.keys(obj), patterns, options);
+      let res = {};
+      for (let key of keys3) res[key] = obj[key];
       return res;
     };
     micromatch.some = (list, patterns, options) => {
-      const items = [].concat(list);
-      for (const pattern of [].concat(patterns)) {
-        const isMatch = picomatch(String(pattern), { windows: true, ...options });
+      let items = [].concat(list);
+      for (let pattern of [].concat(patterns)) {
+        let isMatch = picomatch(String(pattern), options);
         if (items.some((item) => isMatch(item))) {
           return true;
         }
@@ -22021,9 +22009,9 @@ var require_micromatch = __commonJS({
       return false;
     };
     micromatch.every = (list, patterns, options) => {
-      const items = [].concat(list);
-      for (const pattern of [].concat(patterns)) {
-        const isMatch = picomatch(String(pattern), { windows: true, ...options });
+      let items = [].concat(list);
+      for (let pattern of [].concat(patterns)) {
+        let isMatch = picomatch(String(pattern), options);
         if (!items.every((item) => isMatch(item))) {
           return false;
         }
@@ -22034,30 +22022,30 @@ var require_micromatch = __commonJS({
       if (typeof str !== "string") {
         throw new TypeError(`Expected a string: "${util.inspect(str)}"`);
       }
-      return [].concat(patterns).every((p) => picomatch(p, { windows: true, ...options })(str));
+      return [].concat(patterns).every((p) => picomatch(p, options)(str));
     };
     micromatch.capture = (glob2, input, options) => {
-      const windows2 = utils.isWindows(options);
-      const regex = picomatch.makeRe(String(glob2), { windows: true, ...options, capture: true });
-      const match2 = regex.exec(windows2 ? utils.toPosixSlashes(input) : input);
+      let posix4 = utils.isWindows(options);
+      let regex = picomatch.makeRe(String(glob2), { ...options, capture: true });
+      let match2 = regex.exec(posix4 ? utils.toPosixSlashes(input) : input);
       if (match2) {
         return match2.slice(1).map((v) => v === void 0 ? "" : v);
       }
     };
-    micromatch.makeRe = (pattern, options) => picomatch.makeRe(pattern, { windows: true, ...options });
-    micromatch.scan = (pattern, options) => picomatch.scan(pattern, { windows: true, ...options });
+    micromatch.makeRe = (...args) => picomatch.makeRe(...args);
+    micromatch.scan = (...args) => picomatch.scan(...args);
     micromatch.parse = (patterns, options) => {
-      const res = [];
-      for (const pattern of [].concat(patterns || [])) {
-        for (const str of braces(String(pattern), options)) {
-          res.push(picomatch.parse(str, { windows: utils.isWindows(), ...options }));
+      let res = [];
+      for (let pattern of [].concat(patterns || [])) {
+        for (let str of braces(String(pattern), options)) {
+          res.push(picomatch.parse(str, options));
         }
       }
       return res;
     };
     micromatch.braces = (pattern, options) => {
       if (typeof pattern !== "string") throw new TypeError("Expected a string");
-      if (options && options.nobrace === true || !hasBraces(pattern)) {
+      if (options && options.nobrace === true || !/\{.*\}/.test(pattern)) {
         return [pattern];
       }
       return braces(pattern, options);
@@ -22066,7 +22054,6 @@ var require_micromatch = __commonJS({
       if (typeof pattern !== "string") throw new TypeError("Expected a string");
       return micromatch.braces(pattern, { ...options, expand: true });
     };
-    micromatch.hasBraces = hasBraces;
     module2.exports = micromatch;
   }
 });
